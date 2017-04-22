@@ -1,18 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class Test : MonoBehaviour
+public class PlanetGenerator : MonoBehaviour
 {
     [SerializeField] private MeshFilter meshFilter;
     [SerializeField] private float distortionScale = 1f;
     [SerializeField] private float frequency = 1f;
     [SerializeField] private float minHeight = 0.2f;
+    [SerializeField] private float mountainBorder = 0.8f;
     [SerializeField] private bool update = false;
     [SerializeField] private Color waterColor;
     [SerializeField] private Color groundColor;
+    [SerializeField] private Color mountainColor;
 
     private Mesh originalMesh;
 
@@ -61,9 +62,14 @@ public class Test : MonoBehaviour
             Vector3 vertexNormal = originalMesh.normals[i];
             float noiseValue = Mathf.PerlinNoise(texPos.x * frequency, texPos.y * frequency) * seamScale;
             noiseValue = Mathf.Max(minHeight, noiseValue);
-
             newVertexPositions.Add(vertexPos + noiseValue * distortionScale * vertexNormal);
-            newVertexColors.Add(Color.Lerp(waterColor, groundColor, noiseValue));
+
+            Color vertexColor;
+            if (noiseValue <= mountainBorder)
+                vertexColor = Color.Lerp(waterColor, groundColor, noiseValue);
+            else
+                vertexColor = Color.Lerp(groundColor, mountainColor, (noiseValue - mountainBorder) / 0.2f);
+            newVertexColors.Add(vertexColor);
         }
         meshFilter.mesh.SetVertices(newVertexPositions);
         meshFilter.mesh.SetColors(newVertexColors);
