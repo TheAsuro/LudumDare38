@@ -1,0 +1,23 @@
+LD 38
+
+1. Manage village
+	Create paths for people to transport resources between houses
+	Building 1 produces blue boxes
+	Building 2 requires 2 blue boxes, creates 1 red box
+	Maybe build new buildings?
+	...
+
+eventually goal is reached
+~cool zoom out animation~
+
+2. Manage cities
+	Create streets between villages to transport lots of boxes
+	boxes influence fields around village
+	Take over other villages with your box production?
+
+^
+
+3. Manage countries
+	Manage airports
+	airports influence villages around?
+	idk man, make somthing cool
