@@ -9,11 +9,7 @@ public class PlanetGenerator : MonoBehaviour
     [SerializeField] private float distortionScale = 1f;
     [SerializeField] private float frequency = 1f;
     [SerializeField] private float minHeight = 0.2f;
-    [SerializeField] private float mountainBorder = 0.8f;
     [SerializeField] private bool update = false;
-    [SerializeField] private Color waterColor;
-    [SerializeField] private Color groundColor;
-    [SerializeField] private Color mountainColor;
 
     private Mesh originalMesh;
 
@@ -62,13 +58,12 @@ public class PlanetGenerator : MonoBehaviour
             Vector3 vertexNormal = originalMesh.normals[i];
             float noiseValue = Mathf.PerlinNoise(texPos.x * frequency, texPos.y * frequency) * seamScale;
             noiseValue = Mathf.Max(minHeight, noiseValue);
-            newVertexPositions.Add(vertexPos + noiseValue * distortionScale * vertexNormal);
 
-            Color vertexColor;
-            if (noiseValue <= mountainBorder)
-                vertexColor = Color.Lerp(waterColor, groundColor, noiseValue);
-            else
-                vertexColor = Color.Lerp(groundColor, mountainColor, (noiseValue - mountainBorder) / 0.2f);
+            Assert.IsTrue(noiseValue >= 0f);
+            Assert.IsTrue(noiseValue <= 1f);
+
+            newVertexPositions.Add(vertexPos + noiseValue * distortionScale * vertexNormal);
+            Color vertexColor = new Color(0f, 0f, 0f, noiseValue);
             newVertexColors.Add(vertexColor);
         }
         meshFilter.mesh.SetVertices(newVertexPositions);
